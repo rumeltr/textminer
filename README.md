@@ -1,7 +1,7 @@
 textminer
 =========
 
-A few text mining routines written in R using a slightly modified version of the RTextTools package
+This repository contains a few text mining routines written in R using a slightly modified version of the RTextTools package. These routines are then applied to metadata from the Macaulay Library sound collection in order to translate free-form recordist comments into standard categorical behavior classifications.
 
 Information for the users of this code:
     
