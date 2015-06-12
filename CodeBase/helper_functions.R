@@ -159,9 +159,9 @@ all.the.same<-function(df,rm.blanks=TRUE){
 # are returned. The source code for this function, which was written in C++, may be examined
 # at the following location, which must be set manually:
 
-path_to_cpp="~/Desktop/Smithsonian Macaulay Project/Main/up_to_three_weighted_modes.cpp"
-
-Rcpp::sourceCpp(path_to_cpp)
+compileMyCppFunction<-function(source_code_base){
+  Rcpp::sourceCpp(paste(source_code_base,"up_to_three_weighted_modes.cpp",sep=""))
+}
 
 # Assorted statistical error functions (may be used eventually).
 # Translate names as:
