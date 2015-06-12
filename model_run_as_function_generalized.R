@@ -388,8 +388,9 @@ model_run_as_function_generalized<-function(source_code_base,
     # Make a cluster of sockets (n = use.cores) for parallel processing.
     # Additionally, "spawn" the C++ code to each member of the cluster
     
-    CL<-createCluster(use.cores, logfile="/Users/thorongilcvi/Desktop/Smithsonian\ Macaulay\ Project/Logs/logfile.txt", export=ls(.GlobalEnv), lib=my_packages)
-    clusterEvalQ(CL,Rcpp::sourceCpp('~/Desktop/Smithsonian Macaulay Project/Main/up_to_three_weighted_modes.cpp'))
+    CL<-createCluster(use.cores, logfile=paste(analytics_base_dir,"Logs/logfile.txt",sep=""), export=ls(.GlobalEnv), lib=my_packages)
+    clusterExport(CL,c("source_code_base"),envir = environment())
+    clusterEvalQ(CL,compileMyCppFunction(source_code_base))
     
     cat("Converting text comments to RTextTools containers...\n")
     flush.console()
@@ -580,8 +581,9 @@ model_run_as_function_generalized<-function(source_code_base,
     cat("Creating parallel processing cluster...\n")
     flush.console()
     
-    CL<-createCluster(use.cores, logfile="/Users/thorongilcvi/Desktop/Smithsonian\ Macaulay\ Project/Logs/logfile.txt", export=ls(.GlobalEnv), lib=my_packages)
-    clusterEvalQ(CL,Rcpp::sourceCpp('~/Desktop/Smithsonian Macaulay Project/Main/up_to_three_weighted_modes.cpp'))
+    CL<-createCluster(use.cores, logfile=logfile=paste(analytics_base_dir,"Logs/logfile.txt",sep=""), export=ls(.GlobalEnv), lib=my_packages)
+    clusterExport(CL,c("source_code_base"),envir = environment())
+    clusterEvalQ(CL,compileMyCppFunction(source_code_base))
     
     cat("Training models on training sets...\n")
     flush.console()
