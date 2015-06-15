@@ -222,6 +222,8 @@ model_run_as_function_generalized<-function(source_code_base,
   
   source(paste(source_code_base,"helper_functions.R",sep="")) # Custom functions
   
+  compileMyCppFunction(source_code_base)
+  
   ################## MAIN BODY OF SCRIPT BEGINS HERE ##################
   
   options(error=dump.frames(),warn=1)
