@@ -1,6 +1,6 @@
-#   THIS FUNCTION RUNS A BUNCH OF DIFFERENT ROUTINES ON A WELL-FORMATED DATASET*, SAVES THE OUTPUT
-#   IN THE SPECIFIED DIRECTORY, AND IS CAPABLE OF RETURNING UP TO TWO VARIABLES
-#   FOR FURTHER ANALYSIS IN R.
+#   THIS FUNCTION RUNS A BUNCH OF DIFFERENT ROUTINES ON A WELL-FORMATED DATASET (*),
+#   SAVES THE OUTPUT IN THE SPECIFIED DIRECTORY, AND IS CAPABLE OF RETURNING UP TO
+#   TWO VARIABLES FOR FURTHER ANALYSIS IN R.
 
 #   Information for the users of this code:
 #     
@@ -79,7 +79,7 @@
 #   (2011). pROC: an open-source package for R and S+ to analyze and compare ROC curves. BMC Bioinformatics, 12, p. 77.  DOI:
 #   10.1186/1471-2105-12-77 <http://www.biomedcentral.com/1471-2105/12/77/>
 
-#   Information on how to use this function:
+#   * = Information on how to use this function:
 #   
 #   The function model_run_as_function_generalized can be used to mine
 #   categorical text classifications from a dataset that has at least three
@@ -388,7 +388,7 @@ model_run_as_function_generalized<-function(source_code_base,
     # Make a cluster of sockets (n = use.cores) for parallel processing.
     # Additionally, "spawn" the C++ code to each member of the cluster
     
-    CL<-createCluster(use.cores, logfile=paste(analytics_base_dir,"Logs/logfile.txt",sep=""), export=ls(.GlobalEnv), lib=my_packages)
+    CL<-createCluster(use.cores, logfile=logfile=paste(analytics_base_dir,"Logs/logfile.txt",sep=""), export=ls(.GlobalEnv), lib=my_packages)
     clusterExport(CL,c("source_code_base"),envir = environment())
     clusterEvalQ(CL,compileMyCppFunction(source_code_base))
     
