@@ -34,7 +34,7 @@ Rcpp::CharacterVector up_to_three_weighted_modes(Rcpp::CharacterVector labels, R
 	}
 	
 	Rcpp::CharacterVector qualifiers=unique(new_labels);
-  int length_of_qualifiers=qualifiers.size();
+  	int length_of_qualifiers=qualifiers.size();
 	Rcpp::NumericVector qualifier_scores(qualifiers.size());
 	
 	for(int i=0; i<length_of_qualifiers; i++)
