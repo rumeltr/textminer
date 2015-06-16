@@ -47,6 +47,8 @@ Revolution Analytics and Steve Weston (2014). doParallel: Foreach parallel adapt
 Rinker, T. W. (2013). qdap: Quantitative Discourse Analysis Package. version 2.2.0. University at Buffalo. Buffalo, New
   York. http://github.com/trinker/qdap
   
+Sokolova, M., & Lapalme, G. (2009). A systematic analysis of performance measures for classification tasks. Information            Processing and Management, 45, p. 427-437.
+  
 Timothy P. Jurka, Loren Collingwood, Amber E. Boydstun, Emiliano Grossman and Wouter van Atteveldt (2014). RTextTools:
   Automatic Text Classification via Supervised Learning. R package version 1.4.2.
   http://CRAN.R-project.org/package=RTextTools
