@@ -732,6 +732,8 @@ model_run_as_function_generalized<-function(source_code_base,
   cat("Calculating precision, recall, and F-scores...\n")
   flush.console()
   
+  # After Sokolova & Lapalme (2009):
+  
   threshold_eval$PRECISION_3<-do.call("rbind",suppressWarnings(llply(.data = modes_list,.fun = function(x){
     prec<-sapply(unique(x$MANUAL),function(y){
       length(intersect(x[x$MATCH_3==TRUE,"CATNUM"],
