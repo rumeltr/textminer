@@ -231,9 +231,7 @@ analyze_threshold_effects<-function(index, manual, labels, probs, thresholdMin=0
     stop("thresholdMax not valid")
   }
   modes_list<-foreach(j=seq(from = thresholdMin, to = thresholdMax, by=by)) %do% {
-    this_mode<-do.call(rbind,lapply(1:nrow(labels),function(x){
-      up_to_three_weighted_modes(labels = labels[x,], probs = probs[x,],threshold=j)
-    }))
+    this_mode<-modes_analysis(labels = as.matrix(labels), probs = as.matrix(probs),threshold=j)
     this_multiple_behavior_analysis<-data.frame(CATNUM=index,
                                                 MANUAL=manual,
                                                 FIRST=this_mode[,1],
