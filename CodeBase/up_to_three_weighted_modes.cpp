@@ -1,7 +1,7 @@
 #include <Rcpp.h>
 #include <string.h>
 
-// Test
+// Test two
 
 // [[Rcpp::export]]
 Rcpp::CharacterVector up_to_three_weighted_modes(Rcpp::CharacterVector labels, Rcpp::NumericVector probs, double threshold=0, bool inclusive=true)
