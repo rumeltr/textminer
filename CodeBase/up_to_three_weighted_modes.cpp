@@ -87,3 +87,15 @@ Rcpp::CharacterVector up_to_three_weighted_modes(Rcpp::CharacterVector labels, R
 	
 	return(subset_of_output);
 }
+
+// [[Rcpp::export]]
+Rcpp::CharacterMatrix modes_analysis(Rcpp::CharacterMatrix labels, Rcpp::NumericMatrix probs, double threshold=0, bool inclusive=true)
+{
+  int n=labels.nrow();
+  Rcpp::CharacterMatrix output(n,3);
+  for(int i=0; i<n; i++){
+    Rcpp::CharacterVector resultForThisRow=up_to_three_weighted_modes(labels(i,Rcpp::_),probs(i,Rcpp::_),threshold,inclusive);
+    output(i,Rcpp::_)=resultForThisRow;
+  }
+  return(output);
+}
