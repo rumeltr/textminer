@@ -156,8 +156,17 @@ all.the.same<-function(df,rm.blanks=TRUE){
 # each classification are summed up to give a score, and up to three of the classifications
 # with the highest scores are returned. Any four-way ties for first, three-way ties for second,
 # and two-way ties for third are eliminated to ensure that only well-supported classifications
-# are returned. The source code for this function, which was written in C++, may be examined
-# at the following location, which must be set manually:
+# are returned.
+#
+# modes_analysis: performs the same function as up_to_three_weighted_modes, but takes
+# matricies for "labels" and "probs" variables rather than vectors. This has the
+# effect of allowing mode calculation on whole chunks of metadata entries at once.
+# This vesion of the function should be used whenever more than one entry needs modes
+# calculated, as it is much faster than looping or applying over rows in a data frame
+# of results with up_to_three_weighted_modes.
+#
+# The source code for both functions, which was written in C++, may be examined
+# at the location specified by the function call below:
 
 compileMyCppFunction<-function(source_code_base){
   Rcpp::sourceCpp(paste(source_code_base,"up_to_three_weighted_modes.cpp",sep=""))
