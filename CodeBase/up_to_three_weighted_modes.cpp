@@ -4,7 +4,7 @@
 // [[Rcpp::export]]
 Rcpp::CharacterVector up_to_three_weighted_modes(Rcpp::CharacterVector labels, Rcpp::NumericVector probs, double threshold=0, bool inclusive=true)
 {
-	int original_labels_size=labels.size();
+  int original_labels_size=labels.size();
 	int original_probs_size=probs.size();
 	
 	Rcpp::CharacterVector new_labels(original_labels_size);
@@ -34,7 +34,7 @@ Rcpp::CharacterVector up_to_three_weighted_modes(Rcpp::CharacterVector labels, R
 	}
 	
 	Rcpp::CharacterVector qualifiers=unique(new_labels);
-  	int length_of_qualifiers=qualifiers.size();
+  int length_of_qualifiers=qualifiers.size();
 	Rcpp::NumericVector qualifier_scores(qualifiers.size());
 	
 	for(int i=0; i<length_of_qualifiers; i++)
