@@ -732,77 +732,19 @@ model_run_as_function_generalized<-function(source_code_base,
   cat("Calculating precision, recall, and F-scores...\n")
   flush.console()
   
-  # After Sokolova & Lapalme (2009):
+  # After (Godbole):
   
-  threshold_eval$PRECISION_3<-do.call("rbind",suppressWarnings(llply(.data = modes_list,.fun = function(x){
-    prec<-sapply(unique(x$MANUAL),function(y){
-      length(intersect(x[x$MATCH_3==TRUE,"CATNUM"],
-                       x[x$MANUAL==y,"CATNUM"]))/length(x[(x$FIRST==y | x$SECOND==y | x$THIRD==y),"CATNUM"])
-    })
-    weight<-sapply(unique(x$MANUAL),function(y){
-      length(x[x$MANUAL==y,"CATNUM"])
-    })
-    return(weighted.mean(prec,weight,na.rm = T))
-  },.parallel=T)))
+  threshold_eval$PRECISION_3<-precisionMultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,c("FIRST","SECOND","THIRD")])
+  threshold_eval$PRECISION_2<-precisionMultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,c("FIRST","SECOND")])
+  threshold_eval$PRECISION_1<-precisionMultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,"FIRST"])
   
-  threshold_eval$PRECISION_2<-do.call("rbind",suppressWarnings(llply(.data = modes_list,.fun = function(x){
-    prec<-sapply(unique(x$MANUAL),function(y){
-      length(intersect(x[x$MATCH_2==TRUE,"CATNUM"],
-                       x[x$MANUAL==y,"CATNUM"]))/length(x[(x$FIRST==y | x$SECOND==y),"CATNUM"])
-    })
-    weight<-sapply(unique(x$MANUAL),function(y){
-      length(x[x$MANUAL==y,"CATNUM"])
-    })
-    return(weighted.mean(prec,weight,na.rm = T))
-  },.parallel=T)))
+  threshold_eval$RECALL_3<-recallMultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,c("FIRST","SECOND","THIRD")])
+  threshold_eval$RECALL_2<-recallMultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,c("FIRST","SECOND")])
+  threshold_eval$RECALL_1<-recallMultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,"FIRST"])
   
-  threshold_eval$PRECISION_1<-do.call("rbind",suppressWarnings(llply(.data = modes_list,.fun = function(x){
-    prec<-sapply(unique(x$MANUAL),function(y){
-      length(intersect(x[x$MATCH_1==TRUE,"CATNUM"],
-                       x[x$MANUAL==y,"CATNUM"]))/length(x[x$FIRST==y,"CATNUM"])
-    })
-    weight<-sapply(unique(x$MANUAL),function(y){
-      length(x[x$MANUAL==y,"CATNUM"])
-    })
-    return(weighted.mean(prec,weight,na.rm = T))
-  },.parallel=T)))
-  
-  threshold_eval$RECALL_3<-do.call("rbind",suppressWarnings(llply(.data = modes_list,.fun = function(x){
-    rec<-sapply(unique(x$MANUAL),function(y){
-      length(intersect(x[x$MATCH_3==TRUE,"CATNUM"],
-                       x[x$MANUAL==y,"CATNUM"]))/length(x[x$MANUAL==y,"CATNUM"])
-    })
-    weight<-sapply(unique(x$MANUAL),function(y){
-      length(x[x$MANUAL==y,"CATNUM"])
-    })
-    return(weighted.mean(rec,weight,na.rm = T))
-  },.parallel=T)))
-  
-  threshold_eval$RECALL_2<-do.call("rbind",suppressWarnings(llply(.data = modes_list,.fun = function(x){
-    rec<-sapply(unique(x$MANUAL),function(y){
-      length(intersect(x[x$MATCH_2==TRUE,"CATNUM"],
-                       x[x$MANUAL==y,"CATNUM"]))/length(x[x$MANUAL==y,"CATNUM"])
-    })
-    weight<-sapply(unique(x$MANUAL),function(y){
-      length(x[x$MANUAL==y,"CATNUM"])
-    })
-    return(weighted.mean(rec,weight, na.rm = T))
-  },.parallel=T)))
-  
-  threshold_eval$RECALL_1<-do.call("rbind",suppressWarnings(llply(.data = modes_list,.fun = function(x){
-    rec<-sapply(unique(x$MANUAL),function(y){
-      length(intersect(x[x$MATCH_1==TRUE,"CATNUM"],
-                       x[x$MANUAL==y,"CATNUM"]))/length(x[x$MANUAL==y,"CATNUM"])
-    })
-    weight<-sapply(unique(x$MANUAL),function(y){
-      length(x[x$MANUAL==y,"CATNUM"])
-    })
-    return(weighted.mean(rec,weight, na.rm = T))
-  },.parallel=T)))
-  
-  threshold_eval$F1_SCORE_3<-(2*threshold_eval$PRECISION_3*threshold_eval$RECALL_3)/(threshold_eval$PRECISION_3+threshold_eval$RECALL_3)
-  threshold_eval$F1_SCORE_2<-(2*threshold_eval$PRECISION_2*threshold_eval$RECALL_2)/(threshold_eval$PRECISION_2+threshold_eval$RECALL_2)
-  threshold_eval$F1_SCORE_1<-(2*threshold_eval$PRECISION_1*threshold_eval$RECALL_1)/(threshold_eval$PRECISION_1+threshold_eval$RECALL_1)
+  threshold_eval$F1_SCORE_3<-F1MultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,c("FIRST","SECOND","THIRD")])
+  threshold_eval$F1_SCORE_2<-F1MultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,c("FIRST","SECOND")])
+  threshold_eval$F1_SCORE_1<-F1MultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,"FIRST"])
   
   # Calculate AUC values for ROC curves at different threshold values
   

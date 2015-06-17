@@ -253,3 +253,27 @@ analyze_threshold_effects<-function(index, manual, labels, probs, thresholdMin=0
     return(this_multiple_behavior_analysis)
   }
 }
+
+precisionMultiLabel<-function(true_labels,predicted_labels){
+  numerator<-rowWiseIntersect(as.matrix(true_labels),as.matrix(multiple_behavior_analysis[,c("FIRST","SECOND","THIRD")]))
+  numerator[numerator!=""]<-1
+  numerator[numerator==""]<-0
+  numerator<-as.numeric(numerator)
+  denominator<-getLengthOfMatrixRowNonBlank(as.matrix(predicted_labels))
+  return(mean(numerator/denominator))
+}
+
+recallMultiLabel<-function(true_labels,predicted_labels){
+  numerator<-rowWiseIntersect(as.matrix(true_labels),as.matrix(multiple_behavior_analysis[,c("FIRST","SECOND","THIRD")]))
+  numerator[numerator!=""]<-1
+  numerator[numerator==""]<-0
+  numerator<-as.numeric(numerator)
+  denominator<-getLengthOfMatrixRowNonBlank(as.matrix(true_labels))
+  return(mean(numerator/denominator))
+}
+
+F1MultiLabel<-function(true_labels,predicted_labels){
+  precision<-precisionMultiLabel(true_labels,predicted_labels)
+  recall<-recallMultiLabel(true_labels,predicted_labels)
+  return((2*precision*recall)/(precision+recall))
+}
