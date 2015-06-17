@@ -260,7 +260,7 @@ precisionMultiLabel<-function(true_labels,predicted_labels){
   numerator[numerator==""]<-0
   numerator<-as.numeric(numerator)
   denominator<-getLengthOfMatrixRowNonBlank(as.matrix(predicted_labels))
-  return(mean(numerator/denominator))
+  return(mean(numerator/denominator, na.rm = T))
 }
 
 recallMultiLabel<-function(true_labels,predicted_labels){
@@ -269,11 +269,11 @@ recallMultiLabel<-function(true_labels,predicted_labels){
   numerator[numerator==""]<-0
   numerator<-as.numeric(numerator)
   denominator<-getLengthOfMatrixRowNonBlank(as.matrix(true_labels))
-  return(mean(numerator/denominator))
+  return(mean(numerator/denominator,na.rm = T))
 }
 
 F1MultiLabel<-function(true_labels,predicted_labels){
   precision<-precisionMultiLabel(true_labels,predicted_labels)
   recall<-recallMultiLabel(true_labels,predicted_labels)
-  return((2*precision*recall)/(precision+recall))
+  return(mean((2*precision*recall)/(precision+recall),na.rm = T))
 }
