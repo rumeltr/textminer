@@ -43,6 +43,9 @@
 #     
 #   Dirk Eddelbuettel and Romain Francois (2011). Rcpp: Seamless R and C++ Integration. Journal of Statistical Software, 40(8),
 #   1-18. URL http://www.jstatsoft.org/v40/i08/.
+#
+#   Godbole, S., & Sarawagi, S. (2004). Discriminative methods for multi-labeled classification.
+#   In Advances in Knowledge Discovery and Data Mining (pp. 22-30). Springer Berlin Heidelberg.
 #   
 #   Hadley Wickham (2011). The Split-Apply-Combine Strategy for Data Analysis. Journal of Statistical Software, 40(1), 1-29.
 #   URL http://www.jstatsoft.org/v40/i01/.
@@ -64,9 +67,6 @@
 #   
 #   Rinker, T. W. (2013). qdap: Quantitative Discourse Analysis Package. version 2.2.0. University at Buffalo. Buffalo, New
 #   York. http://github.com/trinker/qdap
-#
-#   Sokolova, M., & Lapalme, G. (2009). A systematic analysis of performance measures for classification tasks.
-#   Information Processing and Management, 45, p. 427-437.
 #   
 #   Timothy P. Jurka, Loren Collingwood, Amber E. Boydstun, Emiliano Grossman and Wouter van Atteveldt (2014). RTextTools:
 #   Automatic Text Classification via Supervised Learning. R package version 1.4.2.
@@ -530,7 +530,7 @@ model_run_as_function_generalized<-function(source_code_base,
       return(up_to_three_weighted_modes(big_document_summary_labels[x,],big_document_summary_probs[x,]))
     }))
     
-    multiple_behavior_analysis<-data.frame(CATNUM=testing_set[[index_column]],
+    multiple_label_analysis<-data.frame(CATNUM=testing_set[[index_column]],
                                            MANUAL=testing_set[[classify_column]],
                                            FIRST=big_modes[,1],
                                            SECOND=big_modes[,2],
@@ -663,7 +663,7 @@ model_run_as_function_generalized<-function(source_code_base,
     
     #return(document_summary)
     
-    multiple_behavior_analysis<-data.frame(CATNUM=document_summary$CATNUM,
+    multiple_label_analysis<-data.frame(CATNUM=document_summary$CATNUM,
                                            MANUAL=document_summary$MANUAL_CODE,
                                            FIRST=modes[,1],
                                            SECOND=modes[,2],
@@ -679,17 +679,17 @@ model_run_as_function_generalized<-function(source_code_base,
   # highest classification, or by any of the three highest
   # classifications:
   
-  multiple_behavior_analysis$MATCH_3<-(multiple_behavior_analysis[,"MANUAL"]==multiple_behavior_analysis[,"FIRST"]) | (multiple_behavior_analysis[,"MANUAL"]==multiple_behavior_analysis[,"SECOND"]) | (multiple_behavior_analysis[,"MANUAL"]==multiple_behavior_analysis[,"THIRD"])
+  multiple_label_analysis$MATCH_3<-(multiple_label_analysis[,"MANUAL"]==multiple_label_analysis[,"FIRST"]) | (multiple_label_analysis[,"MANUAL"]==multiple_label_analysis[,"SECOND"]) | (multiple_label_analysis[,"MANUAL"]==multiple_label_analysis[,"THIRD"])
   
-  multiple_behavior_analysis$MATCH_2<-(multiple_behavior_analysis[,"MANUAL"]==multiple_behavior_analysis[,"FIRST"]) | (multiple_behavior_analysis[,"MANUAL"]==multiple_behavior_analysis[,"SECOND"]) # Get those that match in the top two
+  multiple_label_analysis$MATCH_2<-(multiple_label_analysis[,"MANUAL"]==multiple_label_analysis[,"FIRST"]) | (multiple_label_analysis[,"MANUAL"]==multiple_label_analysis[,"SECOND"]) # Get those that match in the top two
   
-  multiple_behavior_analysis$MATCH_1<-multiple_behavior_analysis[,"MANUAL"]==multiple_behavior_analysis[,"FIRST"]
+  multiple_label_analysis$MATCH_1<-multiple_label_analysis[,"MANUAL"]==multiple_label_analysis[,"FIRST"]
   
   # Print current capture rate for n most probable classifications and given probability threshold (currently, t=1.0):
   
-  length(multiple_behavior_analysis[multiple_behavior_analysis$MATCH_3==TRUE,"CATNUM"])/nrow(multiple_behavior_analysis)
-  length(multiple_behavior_analysis[multiple_behavior_analysis$MATCH_2==TRUE,"CATNUM"])/nrow(multiple_behavior_analysis)
-  length(multiple_behavior_analysis[multiple_behavior_analysis$MATCH_1==TRUE,"CATNUM"])/nrow(multiple_behavior_analysis)
+  length(multiple_label_analysis[multiple_label_analysis$MATCH_3==TRUE,"CATNUM"])/nrow(multiple_label_analysis)
+  length(multiple_label_analysis[multiple_label_analysis$MATCH_2==TRUE,"CATNUM"])/nrow(multiple_label_analysis)
+  length(multiple_label_analysis[multiple_label_analysis$MATCH_1==TRUE,"CATNUM"])/nrow(multiple_label_analysis)
   
   cat("Determining the effect of incrementally increasing the classification probability threshold...\n")
   flush.console()
@@ -734,7 +734,7 @@ model_run_as_function_generalized<-function(source_code_base,
   cat("Calculating precision, recall, and F-scores...\n")
   flush.console()
   
-  # After (Godbole):
+  # After Godbole & Sarawagi (2004):
   
   threshold_eval$PRECISION_3<-laply(.data = modes_list,.fun=function(x){
     precisionMultiLabel(x$MANUAL,x[,c("FIRST","SECOND","THIRD")])
@@ -946,7 +946,7 @@ model_run_as_function_generalized<-function(source_code_base,
       })[3] # Performance test
     }
     
-    multiple_behavior_virgin<-data.frame(
+    multiple_label_virgin<-data.frame(
       CATNUM=data_raw_blanks[[index_column]],
       FIRST=modes_virgin[,1],
       SECOND=modes_virgin[,2],
@@ -1077,9 +1077,9 @@ model_run_as_function_generalized<-function(source_code_base,
     write.csv(label_summary,paste(analytics_dump_dir,"label_summary.csv",sep=""))
   }
   
-  write.csv(multiple_behavior_analysis,paste(analytics_dump_dir,"multiple_behavior_analysis.csv",sep=""))
+  write.csv(multiple_label_analysis,paste(analytics_dump_dir,"multiple_label_analysis.csv",sep=""))
   if(classify_virgin_data){
-    write.csv(multiple_behavior_virgin,paste(analytics_dump_dir,"multiple_behavior_virgin.csv",sep=""))
+    write.csv(multiple_label_virgin,paste(analytics_dump_dir,"multiple_label_virgin.csv",sep=""))
   }
   
   cat("Dumping workspace to analytics directory for debugging purposes...\n")
@@ -1113,9 +1113,9 @@ model_run_as_function_generalized<-function(source_code_base,
   cat(paste("Script ran for ",round(end_time[3],digits=2)," seconds\n",sep=""))
   
   if(classify_virgin_data){
-    legal_output<-c("algorithm_summary", "algorithms", "combined", "container", "container_virgin", "document_summary", "document_summary_labels", "document_summary_probs", "ensemble_summary", "label_headers", "label_headers_virgin", "label_summary", "lookup_table", "min_auc", "max_auc", "multiple_behavior_analysis", "multiple_behavior_virgin", "results", "results_virgin", "results_virgin_labels", "results_virgin_probs", "roc", "terms", "testing_set", "threshold", "threshold_eval", "training_set")
+    legal_output<-c("algorithm_summary", "algorithms", "combined", "container", "container_virgin", "document_summary", "document_summary_labels", "document_summary_probs", "ensemble_summary", "label_headers", "label_headers_virgin", "label_summary", "lookup_table", "min_auc", "max_auc", "multiple_label_analysis", "multiple_label_virgin", "results", "results_virgin", "results_virgin_labels", "results_virgin_probs", "roc", "terms", "testing_set", "threshold", "threshold_eval", "training_set")
   } else{
-    legal_output<-c("algorithm_summary", "algorithms", "combined", "container", "container_virgin", "document_summary", "document_summary_labels", "document_summary_probs", "ensemble_summary", "label_headers", "label_summary", "lookup_table", "min_auc", "max_auc", "multiple_behavior_analysis", "results", "results_virgin", "roc", "terms", "testing_set", "threshold", "threshold_eval", "training_set")
+    legal_output<-c("algorithm_summary", "algorithms", "combined", "container", "container_virgin", "document_summary", "document_summary_labels", "document_summary_probs", "ensemble_summary", "label_headers", "label_summary", "lookup_table", "min_auc", "max_auc", "multiple_label_analysis", "results", "results_virgin", "roc", "terms", "testing_set", "threshold", "threshold_eval", "training_set")
   }
   
   if(!(is.null(return_variable_1))){

@@ -26,6 +26,9 @@ David Meyer, Evgenia Dimitriadou, Kurt Hornik, Andreas Weingessel and Friedrich 
 Dirk Eddelbuettel and Romain Francois (2011). Rcpp: Seamless R and C++ Integration. Journal of Statistical Software, 40(8),
   1-18. URL http://www.jstatsoft.org/v40/i08/.
   
+Godbole, S., & Sarawagi, S. (2004). Discriminative methods for multi-labeled classification. In Advances in Knowledge
+  Discovery and Data Mining (pp. 22-30). Springer Berlin Heidelberg.
+  
 Hadley Wickham (2011). The Split-Apply-Combine Strategy for Data Analysis. Journal of Statistical Software, 40(1), 1-29.
   URL http://www.jstatsoft.org/v40/i01/.
     
@@ -46,8 +49,6 @@ Revolution Analytics and Steve Weston (2014). doParallel: Foreach parallel adapt
   
 Rinker, T. W. (2013). qdap: Quantitative Discourse Analysis Package. version 2.2.0. University at Buffalo. Buffalo, New
   York. http://github.com/trinker/qdap
-  
-Sokolova, M., & Lapalme, G. (2009). A systematic analysis of performance measures for classification tasks. Information            Processing and Management, 45, p. 427-437.
   
 Timothy P. Jurka, Loren Collingwood, Amber E. Boydstun, Emiliano Grossman and Wouter van Atteveldt (2014). RTextTools:
   Automatic Text Classification via Supervised Learning. R package version 1.4.2.
