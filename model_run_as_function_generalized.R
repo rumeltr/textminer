@@ -393,7 +393,7 @@ model_run_as_function_generalized<-function(source_code_base,
     # Make a cluster of sockets (n = use.cores) for parallel processing.
     # Additionally, "spawn" the C++ code to each member of the cluster
     
-    CL<-createCluster(use.cores, logfile=logfile=paste(analytics_base_dir,"Logs/logfile.txt",sep=""), export=ls(.GlobalEnv), lib=my_packages)
+    CL<-createCluster(use.cores, logfile=paste(analytics_base_dir,"Logs/logfile.txt",sep=""), export=ls(.GlobalEnv), lib=my_packages)
     clusterExport(CL,c("source_code_base"),envir = environment())
     clusterEvalQ(CL,compileMyCppFunction(source_code_base))
     
@@ -586,7 +586,7 @@ model_run_as_function_generalized<-function(source_code_base,
     cat("Creating parallel processing cluster...\n")
     flush.console()
     
-    CL<-createCluster(use.cores, logfile=logfile=paste(analytics_base_dir,"Logs/logfile.txt",sep=""), export=ls(.GlobalEnv), lib=my_packages)
+    CL<-createCluster(use.cores, logfile=paste(analytics_base_dir,"Logs/logfile.txt",sep=""), export=ls(.GlobalEnv), lib=my_packages)
     clusterExport(CL,c("source_code_base"),envir = environment())
     clusterEvalQ(CL,compileMyCppFunction(source_code_base))
     
@@ -661,6 +661,8 @@ model_run_as_function_generalized<-function(source_code_base,
       })
     })[3] # Performance test
     
+    #return(document_summary)
+    
     multiple_behavior_analysis<-data.frame(CATNUM=document_summary$CATNUM,
                                            MANUAL=document_summary$MANUAL_CODE,
                                            FIRST=modes[,1],
@@ -734,17 +736,35 @@ model_run_as_function_generalized<-function(source_code_base,
   
   # After (Godbole):
   
-  threshold_eval$PRECISION_3<-precisionMultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,c("FIRST","SECOND","THIRD")])
-  threshold_eval$PRECISION_2<-precisionMultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,c("FIRST","SECOND")])
-  threshold_eval$PRECISION_1<-precisionMultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,"FIRST"])
+  threshold_eval$PRECISION_3<-laply(.data = modes_list,.fun=function(x){
+    precisionMultiLabel(x$MANUAL,x[,c("FIRST","SECOND","THIRD")])
+  })
+  threshold_eval$PRECISION_2<-laply(.data = modes_list,.fun=function(x){
+    precisionMultiLabel(x$MANUAL,x[,c("FIRST","SECOND")])
+  })
+  threshold_eval$PRECISION_1<-laply(.data = modes_list,.fun=function(x){
+    precisionMultiLabel(x$MANUAL,x[,"FIRST"])
+  })
   
-  threshold_eval$RECALL_3<-recallMultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,c("FIRST","SECOND","THIRD")])
-  threshold_eval$RECALL_2<-recallMultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,c("FIRST","SECOND")])
-  threshold_eval$RECALL_1<-recallMultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,"FIRST"])
+  threshold_eval$RECALL_3<-laply(.data = modes_list,.fun=function(x){
+    recallMultiLabel(x$MANUAL,x[,c("FIRST","SECOND","THIRD")])
+  })
+  threshold_eval$RECALL_2<-laply(.data = modes_list,.fun=function(x){
+    recallMultiLabel(x$MANUAL,x[,c("FIRST","SECOND")])
+  })
+  threshold_eval$RECALL_1<-laply(.data = modes_list,.fun=function(x){
+    recallMultiLabel(x$MANUAL,x[,"FIRST"])
+  })
   
-  threshold_eval$F1_SCORE_3<-F1MultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,c("FIRST","SECOND","THIRD")])
-  threshold_eval$F1_SCORE_2<-F1MultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,c("FIRST","SECOND")])
-  threshold_eval$F1_SCORE_1<-F1MultiLabel(multiple_behavior_analysis$MANUAL,multiple_behavior_analysis[,"FIRST"])
+  threshold_eval$F1_SCORE_3<-laply(.data = modes_list,.fun=function(x){
+    F1MultiLabel(x$MANUAL,x[,c("FIRST","SECOND","THIRD")])
+  })
+  threshold_eval$F1_SCORE_2<-laply(.data = modes_list,.fun=function(x){
+    F1MultiLabel(x$MANUAL,x[,c("FIRST","SECOND")])
+  })
+  threshold_eval$F1_SCORE_1<-laply(.data = modes_list,.fun=function(x){
+    F1MultiLabel(x$MANUAL,x[,"FIRST"])
+  })
   
   # Calculate AUC values for ROC curves at different threshold values
   

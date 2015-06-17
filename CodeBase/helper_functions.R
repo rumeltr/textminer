@@ -264,7 +264,7 @@ precisionMultiLabel<-function(true_labels,predicted_labels){
 }
 
 recallMultiLabel<-function(true_labels,predicted_labels){
-  numerator<-rowWiseIntersect(as.matrix(true_labels),as.matrix(multiple_behavior_analysis[,c("FIRST","SECOND","THIRD")]))
+  numerator<-rowWiseIntersect(as.matrix(true_labels),as.matrix(predicted_labels))
   numerator[numerator!=""]<-1
   numerator[numerator==""]<-0
   numerator<-as.numeric(numerator)

@@ -100,3 +100,87 @@ Rcpp::CharacterMatrix modes_analysis(Rcpp::CharacterMatrix labels, Rcpp::Numeric
   }
   return(output);
 }
+
+// [[Rcpp::export]]
+CharacterVector findIntersect(CharacterVector a, CharacterVector b)
+{
+  return(intersect(a,b));
+}
+
+// [[Rcpp::export]]
+CharacterVector rowWiseIntersect(CharacterMatrix a, CharacterMatrix b)
+{
+  int nrows_1=a.nrow();
+  int nrows_2=b.nrow();
+  
+  int ncols=std::max(a.ncol(),b.ncol());
+  
+  CharacterMatrix temp_output(0,0);
+  CharacterMatrix output(0,0);
+  
+  if(nrows_1==nrows_2)
+  {
+    int nrows=nrows_1;
+    temp_output=CharacterMatrix(nrows,ncols);
+    for(int i=0; i<nrows; i++)
+    {
+      CharacterVector thisRow=findIntersect(a(i,_),b(i,_));
+      for(int j=0; j<thisRow.length(); j++)
+      {
+        temp_output(i,j)=thisRow(j);
+      }
+    }
+    
+    int columnsWithData=0;
+    
+    for(int i=0; i<ncols; i++)
+    {
+      CharacterVector thisColumn=temp_output(_,i);
+      CharacterVector uniqueValues=unique(thisColumn);
+      if(uniqueValues.size()==1)
+      {
+        std::string uniqueValuesString=Rcpp::as<std::string>(uniqueValues);
+        
+        if(uniqueValuesString!="")
+        {
+          columnsWithData++;
+        }
+      }
+      else
+      {
+        columnsWithData++;
+      }
+    }
+    
+    output=CharacterMatrix(nrows,columnsWithData);
+    
+    for(int i=0; i<columnsWithData; i++)
+    {
+      output(_,i)=temp_output(_,i);
+    }
+  }
+  return(output);
+}
+
+// [[Rcpp::export]]
+NumericVector getLengthOfMatrixRowNonBlank(CharacterMatrix x)
+{
+  int nrows=x.nrow();
+  NumericVector output(nrows);
+  
+  for(int i=0; i<nrows; i++)
+  {
+    CharacterVector thisRow=x(i,_);
+    int numberOfNonBlankEntriesInRow=0;
+    
+    for(int j=0; j<thisRow.size(); j++)
+    {
+      if(thisRow[j]!="")
+      {
+        numberOfNonBlankEntriesInRow++;
+      }
+    }
+    output[i]=numberOfNonBlankEntriesInRow;
+  }
+  return(output);
+}

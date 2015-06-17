@@ -1,4 +1,4 @@
-create_precisionRecallSummary <- function(container, classification_results, b_value=1) {	
+create_precisionRecallSummary_parallel <- function(container, classification_results, scores, b_value=1) {	
 	confusion <- function(true,pred) {
 		conf_out <- table(factor(true,levels=sort(unique(true))),factor(pred,levels=sort(unique(true))))
 		return(conf_out)
@@ -27,13 +27,13 @@ create_precisionRecallSummary <- function(container, classification_results, b_v
 	
 	fscores_out <- function(b_value,precision,recall) {
 		fscores_out <- NULL
-		for (i in seq_along(precision)) {
-			fscores_out[i] <- round(fscore(b_value,precision[i],recall[i]),2)
-		}
+    cores_dump<-alply(.data = seq_along(precision),.margins = 1,.fun = function(x){
+      round(fscore(b_value,precision[x],recall[x]),2)
+    },.parallel=T)
+    
+		fscores_out<-do.call("rbind",cores_dump)
 		return(fscores_out)
 	}
-	
-	scores <- create_scoreSummary(container, classification_results)
 	
 	true <- container@testing_codes
 	columns <- colnames(scores)
