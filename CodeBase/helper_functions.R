@@ -165,7 +165,16 @@ all.the.same<-function(df,rm.blanks=TRUE){
 # calculated, as it is much faster than looping or applying over rows in a data frame
 # of results with up_to_three_weighted_modes.
 #
-# The source code for both functions, which was written in C++, may be examined
+# findIntersect: returns the intersection of two character vectors.
+#
+# rowWiseIntersect: returns a matrix where each row is the intersection of a
+# pair of rows, one from each matrix argument.
+# 
+# getLengthOfMatrixRowNonBlank: given a matrix with rows of character values,
+# some possibly equal to "", returns the number of entries in each row that
+# are not "".
+#
+# The source code for these functions, which was written in C++, may be examined
 # at the location specified by the function call below:
 
 compileMyCppFunction<-function(source_code_base){
