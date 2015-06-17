@@ -5,7 +5,7 @@
 #   Information for the users of this code:
 #     
 #   Aside from using this project as a means of learning the basics of machine learning
-#   and text mining, I also used it as an excuse to improve my competency in the R
+#   and text mining, I also used it as an opportunity to improve my competency in the R
 #   language. Writing this code took a great deal of trial and error, and I found
 #   myself referencing many helpful online resoures when I encountered conceptual challenges
 #   or errors that I did not understand. The vast majority of the time I spent online
