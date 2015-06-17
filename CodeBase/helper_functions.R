@@ -254,6 +254,12 @@ analyze_threshold_effects<-function(index, manual, labels, probs, thresholdMin=0
   }
 }
 
+# precisionMultiLabel, recallMultiLabel, F1MultiLabel: calculate
+# precision, recall, and F1-scores (respectively) for multi-
+# labeled data, taking a matrix of true labels (one row per
+# entry) and a matrix of predicted labels (also one row per
+# entry). After Godbole & Sarawagi (2004).
+
 precisionMultiLabel<-function(true_labels,predicted_labels){
   numerator<-rowWiseIntersect(as.matrix(true_labels),as.matrix(predicted_labels))
   numerator[numerator!=""]<-1
