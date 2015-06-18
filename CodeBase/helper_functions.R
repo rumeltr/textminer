@@ -187,36 +187,24 @@ compileMyCppFunction<-function(source_code_base){
 # E.g. FP determines the number of false positive
 # classifications.
 
-TP<-function(predicted,actual,classname){
-  return(length(predicted[predicted==classname & actual==classname]))
+TP<-function(known,pred){
+  tab<-table(MANUAL=known,PREDICTED=pred)
+  return(sum(diag(tab)))
 }
 
-FP<-function(predicted,actual,classname){
-  return(length(predicted[predicted==classname & actual!=classname]))
+FP<-function(known,pred){
+  tab<-table(MANUAL=known,PREDICTED=pred)
+  return(sum(tab)-sum(diag(tab)))
 }
 
-TN<-function(predicted,actual,classname){
-  return(length(predicted[predicted!=classname & actual!=classname]))
+TPR<-function(known,pred){
+  tp<-TP(known,pred)
+  return(tp/length(known))
 }
 
-FN<-function(predicted,actual,classname){
-  return(length(predicted[predicted!=classname & actual==classname]))
-}
-
-tpr_overall<-function(predicted,actual,classes){
-  return(mean(sapply(classes,tpr_per_class,predicted=predicted,actual=actual)))
-}
-
-tpr_per_class<-function(predicted,actual,classname){
-  TP(predicted,actual,classname)/(TP(predicted,actual,classname)+FN(predicted,actual,classname))
-}
-
-fpr_overall<-function(predicted,actual,classes){
-  return(mean(sapply(classes,fpr_per_class,predicted=predicted,actual=actual)))
-}
-
-fpr_per_class<-function(predicted,actual,classname){
-  FP(predicted,actual,classname)/(FP(predicted,actual,classname)+TN(predicted,actual,classname))
+FPR<-function(known,pred){
+  fp<-FP(known,pred)
+  return(fp/length(known))
 }
 
 # createCluster: initiates a socket cluster for plyr and doParallel calls

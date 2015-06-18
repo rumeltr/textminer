@@ -270,11 +270,11 @@ model_run_as_function_generalized<-function(source_code_base,
   
   if(nrow(data_raw_blanks)==0){
     classify_virgin_data=F
+    data_not_blank<-data_original
   } else{
+    data_not_blank<-data_original[!(data_original[[index_column]] %in% data_raw_blanks[[index_column]]),]
     classify_virgin_data=T
   }
-  
-  data_not_blank<-data_original[!(data_original[[index_column]] %in% data_raw_blanks[[index_column]]),]
   
   # Recode either "song," "call," or both to "other" (caveat:
   # it seems that not recoding them increases the overall
