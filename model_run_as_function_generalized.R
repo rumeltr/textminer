@@ -190,7 +190,23 @@ model_run_as_function_generalized<-function(source_code_base,
   cat("Loading required packages...\n")
   flush.console()
   
-  my_packages<-c("RTextTools","tm","doParallel","parallel","maxent","plyr","compiler","qdap","pROC","Rcpp")
+  my_packages<-c("RTextTools",
+                 "tm",
+                 "doParallel",
+                 "parallel",
+                 "maxent",
+                 "plyr",
+                 "compiler",
+                 "qdap",
+                 "pROC",
+                 "Rcpp",
+                 "ipred",
+                 "glmnet",
+                 "nnet",
+                 "randomForest",
+                 "e1071",
+                 "tree",
+                 "caTools")
   
   sapply(my_packages,library,character.only=TRUE)
   
@@ -222,6 +238,9 @@ model_run_as_function_generalized<-function(source_code_base,
   source(paste(source_code_base,"create_analytics_mod.R",sep="")) # Parallel analytics
   source(paste(source_code_base,"create_scoreSummary_mod.R",sep="")) # Parallel analytics
   source(paste(source_code_base,"create_precisionRecallSummary_mod.R",sep="")) # Parallel analytics
+  
+  source(paste(source_code_base,"train_model_mod.R",sep="")) # Parallel model training
+  source(paste(source_code_base,"classify_model_mod.R",sep="")) # Parallel model classification
   
   source(paste(source_code_base,"helper_functions.R",sep="")) # Custom functions
   
