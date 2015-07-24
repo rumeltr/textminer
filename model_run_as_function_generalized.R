@@ -1066,7 +1066,7 @@ model_run_as_function_generalized<-function(source_code_base,
   dev.off()
   
   png(paste(analytics_dump_dir,"f1_1.png",sep=""),width=800,height=896,units="px")
-  plot(threshold_eval$F1_SCORE_3~threshold_eval$THRESHOLD,
+  plot(threshold_eval$F1_SCORE_1~threshold_eval$THRESHOLD,
        col="green",
        main="F1-Score by Algorithm Confidence - Top Behavior Estimate",
        xlab="Threshold",
